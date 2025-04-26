@@ -1,6 +1,9 @@
 using LibraryAPIWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 
+// Десь на початку програми
+System.Net.ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

@@ -17,5 +17,22 @@ namespace LibraryAPIWebApp.Models
             {
                 Database.EnsureCreated();
             }
+
+            protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+                // Налаштування складеного ключа для BookAuthor
+                modelBuilder.Entity<BookAuthor>()
+                    .HasKey(ba => new { ba.BookId, ba.AuthorId });
+
+                // Налаштування складеного ключа для BookCategory
+                modelBuilder.Entity<BookCategory>()
+                    .HasKey(bc => new { bc.BookId, bc.CategoryId });
+
+                // Налаштування складеного ключа для UserBook
+                modelBuilder.Entity<UserBook>()
+                    .HasKey(ub => new { ub.BookId, ub.UserId });
+
+            base.OnModelCreating(modelBuilder);
+            }
         }
     }

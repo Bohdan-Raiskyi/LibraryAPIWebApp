@@ -6,6 +6,7 @@ namespace LibraryAPIWebApp.Models
 {
     public class Book
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
