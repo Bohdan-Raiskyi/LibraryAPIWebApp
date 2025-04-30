@@ -17,6 +17,6 @@ namespace LibraryAPIWebApp.Models
         public string Description { get; set; }
 
         // Зв'язок багато-до-багатьох з Books через BookAuthors
-        public ICollection<BookAuthor> BookAuthors { get; set; }
+        public ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
     }
 }

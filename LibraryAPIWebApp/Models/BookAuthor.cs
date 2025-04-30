@@ -10,11 +10,11 @@ namespace LibraryAPIWebApp.Models
         [Key]
         [Column(Order = 0)]
         public int BookId { get; set; }
-        public Book Book { get; set; }
+        public Book? Book { get; set; } = null!;
 
         [Key]
         [Column(Order = 1)]
         public int AuthorId { get; set; }
-        public Author Author { get; set; }
+        public Author? Author { get; set; } = null!;
     }
 }
