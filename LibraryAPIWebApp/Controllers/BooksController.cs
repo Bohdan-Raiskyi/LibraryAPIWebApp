@@ -21,23 +21,56 @@ namespace LibraryAPIWebApp.Controllers
         }
 
         // GET: api/Books
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        //{
+        //    return await _context.Books.Include(u => u.UserBooks)
+        //    .ThenInclude(ub => ub.User).ToListAsync();
+        //}
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            return await _context.Books.Include(u => u.UserBooks)
-            .ThenInclude(ub => ub.User).ToListAsync();
+            return await _context.Books
+                .Include(b => b.UserBooks)
+                    .ThenInclude(ub => ub.User)
+                .Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
+                .Include(b => b.BookCategories)
+                    .ThenInclude(bc => bc.Category)
+                .ToListAsync();
         }
 
         // GET: api/Books/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Book>> GetBook(int id)
+        //{
+        //    //var book = await _context.Books.FindAsync(id);
+        //    //з відображенням звязку
+        //    var book = await _context.Books
+        //    .Include(u => u.UserBooks)
+        //        .ThenInclude(ub => ub.User)
+        //    .FirstOrDefaultAsync(u => u.Id == id);
+
+        //    if (book == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return book;
+        //}
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
-            //var book = await _context.Books.FindAsync(id);
-            //з відображенням звязку
             var book = await _context.Books
-            .Include(u => u.UserBooks)
-                .ThenInclude(ub => ub.User)
-            .FirstOrDefaultAsync(u => u.Id == id);
+                .Include(b => b.UserBooks)
+                    .ThenInclude(ub => ub.User)
+                .Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
+                .Include(b => b.BookCategories)
+                    .ThenInclude(bc => bc.Category)
+                .FirstOrDefaultAsync(b => b.Id == id);
 
             if (book == null)
             {
@@ -46,6 +79,7 @@ namespace LibraryAPIWebApp.Controllers
 
             return book;
         }
+
 
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
