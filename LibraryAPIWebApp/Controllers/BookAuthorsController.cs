@@ -75,7 +75,7 @@ public class BookAuthorsController : ControllerBase
     public async Task<ActionResult<BookAuthor>> PostBookAuthor(BookAuthor bookAuthor)
     {
         // Перевірка чи існує користувач
-        var author = await _context.Users.FindAsync(bookAuthor.AuthorId);
+        var author = await _context.Authors.FindAsync(bookAuthor.AuthorId);
         if (author == null)
         {
             return NotFound(new { message = $"Автора з ID {bookAuthor.AuthorId} не знайдено." });

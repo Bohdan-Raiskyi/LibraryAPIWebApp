@@ -75,8 +75,8 @@ public class BookCategoriesController : ControllerBase
     public async Task<ActionResult<BookCategory>> PostBookCategory(BookCategory bookCategory)
     {
         // Перевірка чи існує категорія
-        var author = await _context.Users.FindAsync(bookCategory.CategoryId);
-        if (author == null)
+        var category = await _context.Categories.FindAsync(bookCategory.CategoryId);
+        if (category == null)
         {
             return NotFound(new { message = $"Категорії з ID {bookCategory.CategoryId} не знайдено." });
         }
