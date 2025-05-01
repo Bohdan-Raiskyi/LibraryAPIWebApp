@@ -44,12 +44,16 @@ namespace LibraryAPIWebApp.Controllers
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAuthor(int id, Author author)
+        public async Task<IActionResult> PutAuthor(Author author)
         {
-            if (id != author.Id)
+            // Витягуємо id з URL-адреси (з маршруту)
+            if (!int.TryParse(RouteData.Values["id"]?.ToString(), out var id))
             {
-                return BadRequest();
+                return BadRequest("Invalid id in route.");
             }
+
+            // Встановлюємо id вручну
+            author.Id = id;
 
             _context.Entry(author).State = EntityState.Modified;
 

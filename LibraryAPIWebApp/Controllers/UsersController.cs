@@ -24,14 +24,21 @@ namespace LibraryAPIWebApp.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            // відображення звязку
+            return await _context.Users.Include(u => u.UserBooks)
+            .ThenInclude(ub => ub.Book).ToListAsync();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            //var user = await _context.Users.FindAsync(id);
+            //з відображенням звязку
+            var user = await _context.Users
+            .Include(u => u.UserBooks)
+                .ThenInclude(ub => ub.Book)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
             {
@@ -44,11 +51,24 @@ namespace LibraryAPIWebApp.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser([FromBody] User user)
         {
-            if (id != user.Id)
+            // Витягуємо id з URL-адреси (з маршруту)
+            if (!int.TryParse(RouteData.Values["id"]?.ToString(), out var id))
             {
-                return BadRequest();
+                return BadRequest("Invalid id in route.");
+            }
+
+            // Встановлюємо id вручну
+            user.Id = id;
+
+            // Перевірка: чи вже існує користувач з таким email
+            var emailExists = await _context.Users
+                .AnyAsync(u => u.Email == user.Email && u.Id != id);
+
+            if (emailExists)
+            {
+                return Conflict(new { message = "Користувач з такою адресою електронної пошти вже існує." });
             }
 
             _context.Entry(user).State = EntityState.Modified;
@@ -59,7 +79,7 @@ namespace LibraryAPIWebApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!UserExists(user.Id))
                 {
                     return NotFound();
                 }
@@ -72,11 +92,22 @@ namespace LibraryAPIWebApp.Controllers
             return NoContent();
         }
 
+
+
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            // Перевірка: чи вже існує користувач з таким email
+            var emailExists = await _context.Users
+                .AnyAsync(u => u.Email == user.Email);
+
+            if (emailExists)
+            {
+                return Conflict(new { message = "Користувач з такою адресою електронної пошти вже існує." });
+            }
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 

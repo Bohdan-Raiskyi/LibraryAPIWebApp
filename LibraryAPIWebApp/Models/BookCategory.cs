@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using LibraryAPIWebApp.Models;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPIWebApp.Models
 {
@@ -10,11 +11,15 @@ namespace LibraryAPIWebApp.Models
         [Key]
         [Column(Order = 0)]
         public int BookId { get; set; }
-        public Book? Book { get; set; } = null!;
+
+        [JsonIgnore]
+        public virtual Book? Book { get; set; } = null!;
 
         [Key]
         [Column(Order = 1)]
         public int CategoryId { get; set; }
-        public Category? Category { get; set; } = null!;
+
+        [JsonIgnore]
+        public virtual Category? Category { get; set; } = null!;
     }
 }

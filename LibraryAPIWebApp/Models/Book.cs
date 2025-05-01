@@ -20,8 +20,8 @@ namespace LibraryAPIWebApp.Models
         public int PageCount { get; set; }
 
         // Зв'язки багато-до-багатьох
-        public ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
-        public ICollection<BookCategory> BookCategories { get; set; } = new List<BookCategory>();
-        public ICollection<UserBook> UserBooks { get; set; } = new List<UserBook>();
+        public virtual ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
+        public virtual ICollection<BookCategory> BookCategories { get; set; } = new List<BookCategory>();
+        public virtual ICollection<UserBook> UserBooks { get; set; } = new List<UserBook>();
     }
 }

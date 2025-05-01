@@ -22,6 +22,6 @@ namespace LibraryAPIWebApp.Models
         public string PasswordHash { get; set; }
 
         // Зв'язок багато-до-багатьох з Books через UsersBooks
-        public ICollection<UserBook> UserBooks { get; set; } = new List<UserBook>();
+        public virtual ICollection<UserBook> UserBooks { get; set; } = new List<UserBook>();
     }
 }

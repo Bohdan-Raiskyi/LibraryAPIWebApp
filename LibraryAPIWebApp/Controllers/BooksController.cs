@@ -24,14 +24,20 @@ namespace LibraryAPIWebApp.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            return await _context.Books.ToListAsync();
+            return await _context.Books.Include(u => u.UserBooks)
+            .ThenInclude(ub => ub.User).ToListAsync();
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
-            var book = await _context.Books.FindAsync(id);
+            //var book = await _context.Books.FindAsync(id);
+            //з відображенням звязку
+            var book = await _context.Books
+            .Include(u => u.UserBooks)
+                .ThenInclude(ub => ub.User)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
             if (book == null)
             {
@@ -44,12 +50,16 @@ namespace LibraryAPIWebApp.Controllers
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBook(int id, Book book)
+        public async Task<IActionResult> PutBook(Book book)
         {
-            if (id != book.Id)
+            // Витягуємо id з URL-адреси (з маршруту)
+            if (!int.TryParse(RouteData.Values["id"]?.ToString(), out var id))
             {
-                return BadRequest();
+                return BadRequest("Invalid id in route.");
             }
+
+            // Встановлюємо id вручну
+            book.Id = id;
 
             _context.Entry(book).State = EntityState.Modified;
 

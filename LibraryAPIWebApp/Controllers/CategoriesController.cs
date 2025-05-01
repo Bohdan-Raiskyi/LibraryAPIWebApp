@@ -44,12 +44,16 @@ namespace LibraryAPIWebApp.Controllers
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        public async Task<IActionResult> PutCategory(Category category)
         {
-            if (id != category.Id)
+            // Витягуємо id з URL-адреси (з маршруту)
+            if (!int.TryParse(RouteData.Values["id"]?.ToString(), out var id))
             {
-                return BadRequest();
+                return BadRequest("Invalid id in route.");
             }
+
+            // Встановлюємо id вручну
+            category.Id = id;
 
             _context.Entry(category).State = EntityState.Modified;
 
