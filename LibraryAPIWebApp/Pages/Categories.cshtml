@@ -1,26 +1,31 @@
-﻿<!DOCTYPE html>
+﻿@page
+@model LibraryAPIWebApp.Pages.CategoriesModel
+@{
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Informatics-2021-Lab2 Library</title>
     <link rel="stylesheet" href="css/site.css" />
+
 </head>
 <body>
-    <h1>Library</h1>
-    <h3>Add Category</h3>
+    <h1>Онлайн бібліотека</h1>
+    <h3>Додати категорію</h3>
     <form action="javascript:void(0);" method="POST" onsubmit="addCategory()">
-        <input type="text" id="add-name" placeholder="New Category">
-        <input type="text" id="add-description" placeholder="New Description Category">
-        <input type="submit" value="Add">
+        <input type="text" id="add-name" placeholder="Назва">
+        <input type="text" id="add-description" placeholder="Опис">
+        <input type="submit" value="Додати">
     </form>
 
     <div id="editForm">
-        <h3>Edit</h3>
+        <h3>Змінити</h3>
         <form action="javascript:void(0);" onsubmit="updateCategory()">
             <input type="hidden" id="edit-id">
             <input type="text" id="edit-name">
             <input type="text" id="edit-description">
-            <input type="submit" value="Save">
+            <input type="submit" value="Зберегти">
             <a onclick="closeInput()" aria-label="Close">&#10006;</a>
         </form>
     </div>
@@ -29,13 +34,13 @@
 
     <table>
         <tr>
-            <th>Name</th>
-            <th>Description</th>
+            <th>Назва категорії</th>
+            <th>Опис</th>
         </tr>
         <tbody id="categories"></tbody>
     </table>
 
-    <script src="js/lab2.js" asp-append-version="true"></script>
+    <script src="js/categories.js" asp-append-version="true"></script>
     <script type="text/javascript">
         getCategories();
     </script>

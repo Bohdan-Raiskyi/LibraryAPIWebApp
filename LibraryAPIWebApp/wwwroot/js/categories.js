@@ -91,11 +91,11 @@ function _displayCategories(data) {
 
     data.forEach(category => {
         let editButton = button.cloneNode(false);
-        editButton.innerText = 'Edit';
+        editButton.innerText = 'Змінити';
         editButton.setAttribute('onclick', `displayEditForm(${category.id})`);
 
         let deleteButton = button.cloneNode(false);
-        deleteButton.innerText = 'Delete';
+        deleteButton.innerText = 'Видалити';
         deleteButton.setAttribute('onclick', `deleteCategory(${category.id})`);
 
         let tr = tBody.insertRow();
